@@ -263,6 +263,7 @@ test_sources = \
 	objectivec_interface.mm			\
 	objectivec_property.mm			\
 	objectivec_protocol.mm			\
+	oop.sv							\
 	Package.pm						\
 	php5_5_class_kw.php				\
 	parenthesis-rvalue.js			\
@@ -306,6 +307,7 @@ test_sources = \
 	simple.d						\
 	simple.diff						\
 	simple.docbook					\
+	simple.fth						\
 	simple.hs						\
 	simple.hx						\
 	simple.html						\
@@ -316,6 +318,7 @@ test_sources = \
 	simple.lisp						\
 	simple.lua						\
 	simple.mak						\
+	simple.Meson_unittest			\
 	simple.md						\
 	simple.ml						\
 	simple.php						\
@@ -325,8 +328,10 @@ test_sources = \
 	simple.raku						\
 	simple.rb						\
 	simple.rst						\
+	simple.scss						\
 	simple.sh						\
 	simple.tcl						\
+	simple.tf						\
 	simple.ts						\
 	simple.vala						\
 	simple.zep						\
@@ -341,6 +346,7 @@ test_sources = \
 	strings.php						\
 	strings.rb						\
 	structure.f						\
+	sysverilog.sv					\
 	tabindent.py					\
 	test.erl						\
 	test.go							\

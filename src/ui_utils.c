@@ -528,11 +528,9 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 
 	if (IS_SCINTILLA(focusw))
 		enable = (doc == NULL) ? FALSE : sci_has_selection(doc->editor->sci);
-	else
-	if (GTK_IS_EDITABLE(focusw))
+	else if (GTK_IS_EDITABLE(focusw))
 		enable = gtk_editable_get_selection_bounds(GTK_EDITABLE(focusw), NULL, NULL);
-	else
-	if (GTK_IS_TEXT_VIEW(focusw))
+	else if (GTK_IS_TEXT_VIEW(focusw))
 	{
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
 			GTK_TEXT_VIEW(focusw));
@@ -726,8 +724,7 @@ static void insert_date(GeanyDocument *doc, gint pos, const gchar *date_style)
 	else
 	{
 		gchar *str = dialogs_show_input(_("Custom Date Format"), GTK_WINDOW(main_widgets.window),
-				_("Enter here a custom date and time format. "
-				"For a list of available conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."),
+				_("Custom date format (see https://docs.gtk.org/glib/method.DateTime.format.html):"),
 				ui_prefs.custom_date_format);
 		if (str)
 			SETPTR(ui_prefs.custom_date_format, str);
@@ -2523,6 +2520,11 @@ void ui_init_builder(void)
 			continue;
 
 		widget = GTK_WIDGET(iter->data);
+
+#ifdef G_OS_WIN32
+		if (GTK_IS_WINDOW(widget))
+			win32_update_titlebar_theme(widget);
+#endif
 
 		name = ui_guess_object_name(G_OBJECT(widget));
 		if (! name)

@@ -11,8 +11,8 @@ cxx = meson.get_compiler('cpp')
 prefix = get_option('prefix')
 
 deps_in = [
-	['glib-2.0',    '2.32'],
-	['gmodule-2.0', '2.32'],
+	['glib-2.0',    '2.56'],
+	['gmodule-2.0', '2.56'],
 	['gtk+-3.0',    '3.24']
 ]
 
@@ -71,7 +71,6 @@ check_functions = [
 	['memcpy',  '#include <string.h>'],
 	['mkstemp', '#include <stdlib.h>'],
 	['realpath', '#include <limits.h>\n#include <stdlib.h>'],
-	['regcomp', '#include <regex.h>'],
 	['socket', '#include <sys/socket.h>'],
 	# man page says strings.h but we include only string.h and it works
 	['strcasecmp', '#include <string.h>'],
@@ -86,6 +85,11 @@ check_functions = [
 	['wcscoll', '#include <wchar.h>'],
 	['g_strv_equal', '#include <glib.h>']
 ]
+
+# Using builtin regex on macOS for performance reasons
+if (host_machine.system() != 'darwin')
+	check_functions += [['regcomp', '#include <regex.h>']]
+endif
 
 foreach h : check_headers
 	define = 'HAVE_' + h.underscorify().to_upper()
@@ -132,8 +136,8 @@ else
 	cdata.set('GEANY_DATA_DIR', join_paths(prefix, get_option('datadir'), 'geany'))
 	cdata.set('GEANY_DOC_DIR', join_paths(prefix, get_option('datadir'), 'doc', 'geany'))
 endif
-cdata.set('top_srcdir', meson.source_root())
-cdata.set('top_builddir', meson.build_root())
+cdata.set('top_srcdir', meson.project_source_root())
+cdata.set('top_builddir', meson.project_build_root())
 
 # for geany.pc (adapted from GTK+)
 pcconf = cdata
@@ -201,7 +205,7 @@ def_cflags = basic_cflags + [
 # we're using lots of deprecated stuff with gtk3 (often because there is no proper alternative!)
 	'-Wno-deprecated-declarations',
 	'-DGDK_DISABLE_DEPRECATION_WARNINGS',
-	'-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_32',
+	'-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_56',
 	'-DGEANY_PREFIX="@0@"'.format(get_option('prefix')),
 	'-DGEANY_DOCDIR="@0@"'.format(join_paths(prefix, get_option('datadir'), 'doc'))
 ]
@@ -258,6 +262,7 @@ lexilla = static_library('lexilla',
 	'scintilla/lexilla/lexers/LexCPP.cxx',
 	'scintilla/lexilla/lexers/LexCSS.cxx',
 	'scintilla/lexilla/lexers/LexD.cxx',
+	'scintilla/lexilla/lexers/LexDart.cxx',
 	'scintilla/lexilla/lexers/LexDiff.cxx',
 	'scintilla/lexilla/lexers/LexErlang.cxx',
 	'scintilla/lexilla/lexers/LexForth.cxx',
@@ -273,6 +278,7 @@ lexilla = static_library('lexilla',
 	'scintilla/lexilla/lexers/LexMarkdown.cxx',
 	'scintilla/lexilla/lexers/LexMatlab.cxx',
 	'scintilla/lexilla/lexers/LexNim.cxx',
+	'scintilla/lexilla/lexers/LexNix.cxx',
 	'scintilla/lexilla/lexers/LexNsis.cxx',
 	'scintilla/lexilla/lexers/LexNull.cxx',
 	'scintilla/lexilla/lexers/LexPascal.cxx',
@@ -288,11 +294,13 @@ lexilla = static_library('lexilla',
 	'scintilla/lexilla/lexers/LexSmalltalk.cxx',
 	'scintilla/lexilla/lexers/LexSQL.cxx',
 	'scintilla/lexilla/lexers/LexTCL.cxx',
+	'scintilla/lexilla/lexers/LexTOML.cxx',
 	'scintilla/lexilla/lexers/LexTxt2tags.cxx',
 	'scintilla/lexilla/lexers/LexVerilog.cxx',
 	'scintilla/lexilla/lexers/LexVHDL.cxx',
 	'scintilla/lexilla/lexers/LexVisualProlog.cxx',
 	'scintilla/lexilla/lexers/LexYAML.cxx',
+	'scintilla/lexilla/lexers/LexZig.cxx',
 	'scintilla/lexilla/lexlib/Accessor.cxx',
 	'scintilla/lexilla/lexlib/Accessor.h',
 	'scintilla/lexilla/lexlib/CatalogueModules.h',
@@ -302,6 +310,8 @@ lexilla = static_library('lexilla',
 	'scintilla/lexilla/lexlib/CharacterSet.h',
 	'scintilla/lexilla/lexlib/DefaultLexer.cxx',
 	'scintilla/lexilla/lexlib/DefaultLexer.h',
+	'scintilla/lexilla/lexlib/InList.cxx',
+	'scintilla/lexilla/lexlib/InList.h',
 	'scintilla/lexilla/lexlib/LexAccessor.cxx',
 	'scintilla/lexilla/lexlib/LexAccessor.h',
 	'scintilla/lexilla/lexlib/LexerBase.cxx',
@@ -418,6 +428,8 @@ scintilla = static_library('scintilla',
 	'scintilla/src/SplitVector.h',
 	'scintilla/src/Style.cxx',
 	'scintilla/src/Style.h',
+	'scintilla/src/UndoHistory.cxx',
+	'scintilla/src/UndoHistory.h',
 	'scintilla/src/UniConversion.cxx',
 	'scintilla/src/UniConversion.h',
 	'scintilla/src/UniqueString.cxx',
@@ -596,6 +608,10 @@ ctags = static_library('ctags',
 	'ctags/main/xtag.c',
 	'ctags/main/xtag.h',
 	'ctags/main/xtag_p.h',
+	'ctags/optlib/forth.c',
+	'ctags/optlib/meson.c',
+	'ctags/optlib/scss.c',
+	'ctags/optlib/terraform.c',
 	'ctags/parsers/abaqus.c',
 	'ctags/parsers/abc.c',
 	'ctags/parsers/ada.c',
@@ -908,7 +924,7 @@ executable('geany',
 	link_with: libgeany,
 	c_args: geany_cflags + [ '-DG_LOG_DOMAIN="Geany"' ],
 	dependencies: deps,
-	build_rpath: meson.build_root(),
+	build_rpath: meson.project_build_root(),
 	install_rpath: '$ORIGIN/../' + get_option('libdir'),
 	install: true,
 	win_subsystem: 'windows',

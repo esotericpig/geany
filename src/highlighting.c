@@ -1014,6 +1014,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(CONF);
 		init_styleset_case(CSS);
 		init_styleset_case(D);
+		init_styleset_case(DART);
 		init_styleset_case(DIFF);
 		init_styleset_case(LISP);
 		init_styleset_case(ERLANG);
@@ -1036,6 +1037,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(MATLAB);
 		init_styleset_case(MARKDOWN);
 		init_styleset_case(NIM);
+		init_styleset_case(NIX);
 		init_styleset_case(NSIS);
 		init_styleset_case(OBJECTIVEC);
 		init_styleset_case(PASCAL);
@@ -1053,12 +1055,14 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(SMALLTALK);
 		init_styleset_case(SQL);
 		init_styleset_case(TCL);
+		init_styleset_case(TOML);
 		init_styleset_case(TXT2TAGS);
 		init_styleset_case(VHDL);
 		init_styleset_case(VERILOG);
 		init_styleset_case(XML);
 		init_styleset_case(YAML);
 		init_styleset_case(ZEPHIR);
+		init_styleset_case(ZIG);
 		default:
 			if (ft->lexer_filetype)
 				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
@@ -1110,6 +1114,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(CONF);
 		styleset_case(CSS);
 		styleset_case(D);
+		styleset_case(DART);
 		styleset_case(DIFF);
 		styleset_case(LISP);
 		styleset_case(ERLANG);
@@ -1132,6 +1137,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(MARKDOWN);
 		styleset_case(MATLAB);
 		styleset_case(NIM);
+		styleset_case(NIX);
 		styleset_case(NSIS);
 		styleset_case(OBJECTIVEC);
 		styleset_case(PASCAL);
@@ -1149,12 +1155,14 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(SMALLTALK);
 		styleset_case(SQL);
 		styleset_case(TCL);
+		styleset_case(TOML);
 		styleset_case(TXT2TAGS);
 		styleset_case(VHDL);
 		styleset_case(VERILOG);
 		styleset_case(XML);
 		styleset_case(YAML);
 		styleset_case(ZEPHIR);
+		styleset_case(ZIG);
 		case GEANY_FILETYPES_NONE:
 		default:
 			styleset_default(sci, ft->id);
@@ -1566,10 +1574,12 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_HJA_SINGLESTRING ||
 				style == SCE_HJA_STRINGEOL ||
 				style == SCE_HJA_REGEX ||
+				style == SCE_HJA_TEMPLATELITERAL ||
 				style == SCE_HJ_DOUBLESTRING ||
 				style == SCE_HJ_SINGLESTRING ||
 				style == SCE_HJ_STRINGEOL ||
 				style == SCE_HJ_REGEX ||
+				style == SCE_HJ_TEMPLATELITERAL ||
 				style == SCE_HPA_CHARACTER ||
 				style == SCE_HPA_STRING ||
 				style == SCE_HPA_TRIPLE ||
@@ -1617,6 +1627,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_RUST_STRINGR ||
 				style == SCE_RUST_BYTESTRING ||
 				style == SCE_RUST_BYTESTRINGR ||
+				style == SCE_RUST_CSTRING ||
+				style == SCE_RUST_CSTRINGR ||
 				style == SCE_RUST_LEXERROR);
 
 		case SCLEX_COFFEESCRIPT:
@@ -1665,16 +1677,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_VISUALPROLOG_EMBEDDED ||
 				style == SCE_VISUALPROLOG_PLACEHOLDER);
 
-		case SCLEX_BATCH:
-		case SCLEX_DIFF:
-		case SCLEX_LATEX:
-		case SCLEX_MAKEFILE:
-		case SCLEX_MARKDOWN:
-		case SCLEX_PROPERTIES:
-		case SCLEX_TXT2TAGS:
-		case SCLEX_YAML:
-			/* there is no string type in those lexers, listing here just for completeness */
-			return FALSE;
+		case SCLEX_TOML:
+			return (style == SCE_TOML_STRING_SQ ||
+				style == SCE_TOML_STRING_DQ ||
+				style == SCE_TOML_TRIPLE_STRING_SQ ||
+				style == SCE_TOML_TRIPLE_STRING_DQ);
 
 		case SCLEX_AU3:
 			return (style == SCE_AU3_STRING);
@@ -1685,6 +1692,38 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_NIM_TRIPLE ||
 				style == SCE_NIM_TRIPLEDOUBLE ||
 				style == SCE_NIM_STRINGEOL);
+
+		case SCLEX_ZIG:
+			return (style == SCE_ZIG_STRING ||
+				style == SCE_ZIG_MULTISTRING ||
+				style == SCE_ZIG_CHARACTER ||
+				style == SCE_ZIG_ESCAPECHAR);
+
+		case SCLEX_DART:
+			return (style == SCE_DART_STRING_SQ ||
+				style == SCE_DART_STRING_DQ ||
+				style == SCE_DART_TRIPLE_STRING_SQ ||
+				style == SCE_DART_TRIPLE_STRING_DQ ||
+				style == SCE_DART_RAWSTRING_SQ ||
+				style == SCE_DART_RAWSTRING_DQ ||
+				style == SCE_DART_TRIPLE_RAWSTRING_SQ ||
+				style == SCE_DART_TRIPLE_RAWSTRING_DQ);
+
+		case SCLEX_NIX:
+			return (style == SCE_NIX_STRING ||
+				style == SCE_NIX_STRING_MULTILINE ||
+				style == SCE_NIX_ESCAPECHAR);
+
+		case SCLEX_BATCH:
+		case SCLEX_DIFF:
+		case SCLEX_LATEX:
+		case SCLEX_MAKEFILE:
+		case SCLEX_MARKDOWN:
+		case SCLEX_PROPERTIES:
+		case SCLEX_TXT2TAGS:
+		case SCLEX_YAML:
+			/* there is no string type in those lexers, listing here just for completeness */
+			return FALSE;
 	}
 	return FALSE;
 }
@@ -1937,6 +1976,24 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_NIM_COMMENTDOC ||
 				style == SCE_NIM_COMMENTLINE ||
 				style == SCE_NIM_COMMENTLINEDOC);
+
+		case SCLEX_ZIG:
+			return (style == SCE_ZIG_COMMENTLINE ||
+				style == SCE_ZIG_COMMENTLINEDOC ||
+				style == SCE_ZIG_COMMENTLINETOP);
+
+		case SCLEX_DART:
+			return (style == SCE_DART_COMMENTLINE ||
+				style == SCE_DART_COMMENTLINEDOC ||
+				style == SCE_DART_COMMENTBLOCK ||
+				style == SCE_DART_COMMENTBLOCKDOC);
+
+		case SCLEX_NIX:
+			return (style == SCE_NIX_COMMENTLINE ||
+				style == SCE_NIX_COMMENTBLOCK);
+
+		case SCLEX_TOML:
+			return (style == SCE_TOML_COMMENT);
 	}
 	return FALSE;
 }

@@ -28,6 +28,7 @@ filetypes_dist = \
 	filedefs/filetypes.CUDA.conf \
 	filedefs/filetypes.Cython.conf \
 	filedefs/filetypes.d \
+	filedefs/filetypes.dart \
 	filedefs/filetypes.diff \
 	filedefs/filetypes.docbook \
 	filedefs/filetypes.Dockerfile.conf \
@@ -44,18 +45,21 @@ filetypes_dist = \
 	filedefs/filetypes.Groovy.conf \
 	filedefs/filetypes.haskell \
 	filedefs/filetypes.haxe \
+	filedefs/filetypes.HCL.conf \
 	filedefs/filetypes.html \
 	filedefs/filetypes.java \
 	filedefs/filetypes.javascript \
 	filedefs/filetypes.julia \
 	filedefs/filetypes.JSON.conf \
 	filedefs/filetypes.latex \
+	filedefs/filetypes.LESS.conf \
 	filedefs/filetypes.lisp \
 	filedefs/filetypes.lua \
 	filedefs/filetypes.Kotlin.conf \
 	filedefs/filetypes.makefile \
 	filedefs/filetypes.markdown \
 	filedefs/filetypes.matlab \
+	filedefs/filetypes.nix \
 	filedefs/filetypes.Meson.conf \
 	filedefs/filetypes.nim \
 	filedefs/filetypes.nsis \
@@ -72,19 +76,23 @@ filetypes_dist = \
 	filedefs/filetypes.ruby \
 	filedefs/filetypes.rust \
 	filedefs/filetypes.Scala.conf \
+	filedefs/filetypes.SCSS.conf \
 	filedefs/filetypes.sh \
 	filedefs/filetypes.smalltalk \
 	filedefs/filetypes.sql \
 	filedefs/filetypes.Swift.conf \
+	filedefs/filetypes.SystemVerilog.conf \
 	filedefs/filetypes.TypeScript.conf \
 	filedefs/filetypes.tcl \
+	filedefs/filetypes.toml \
 	filedefs/filetypes.txt2tags \
 	filedefs/filetypes.vala \
 	filedefs/filetypes.verilog \
 	filedefs/filetypes.vhdl \
 	filedefs/filetypes.xml \
 	filedefs/filetypes.yaml \
-	filedefs/filetypes.zephir
+	filedefs/filetypes.zephir \
+	filedefs/filetypes.zig
 
 # generated filetypes
 filetypes_nodist = \

@@ -28,6 +28,7 @@ lexilla/lexers/LexCaml.cxx             \
 lexilla/lexers/LexCmake.cxx            \
 lexilla/lexers/LexCoffeeScript.cxx     \
 lexilla/lexers/LexD.cxx                \
+lexilla/lexers/LexDart.cxx             \
 lexilla/lexers/LexDiff.cxx             \
 lexilla/lexers/LexErlang.cxx           \
 lexilla/lexers/LexForth.cxx            \
@@ -43,6 +44,7 @@ lexilla/lexers/LexMake.cxx             \
 lexilla/lexers/LexMarkdown.cxx         \
 lexilla/lexers/LexMatlab.cxx           \
 lexilla/lexers/LexNim.cxx              \
+lexilla/lexers/LexNix.cxx              \
 lexilla/lexers/LexNsis.cxx             \
 lexilla/lexers/LexNull.cxx             \
 lexilla/lexers/LexPascal.cxx           \
@@ -58,11 +60,13 @@ lexilla/lexers/LexRust.cxx             \
 lexilla/lexers/LexSmalltalk.cxx        \
 lexilla/lexers/LexSQL.cxx              \
 lexilla/lexers/LexTCL.cxx              \
+lexilla/lexers/LexTOML.cxx             \
 lexilla/lexers/LexTxt2tags.cxx         \
 lexilla/lexers/LexVHDL.cxx             \
 lexilla/lexers/LexVerilog.cxx          \
 lexilla/lexers/LexVisualProlog.cxx     \
-lexilla/lexers/LexYAML.cxx
+lexilla/lexers/LexYAML.cxx             \
+lexilla/lexers/LexZig.cxx
 
 LEXLIB_SRCS =                          \
 lexilla/include/Lexilla.h              \
@@ -76,6 +80,8 @@ lexilla/lexlib/CharacterSet.cxx        \
 lexilla/lexlib/CharacterSet.h          \
 lexilla/lexlib/DefaultLexer.cxx        \
 lexilla/lexlib/DefaultLexer.h          \
+lexilla/lexlib/InList.cxx              \
+lexilla/lexlib/InList.h                \
 lexilla/lexlib/LexAccessor.cxx         \
 lexilla/lexlib/LexAccessor.h           \
 lexilla/lexlib/LexerBase.cxx           \
@@ -179,6 +185,8 @@ src/SparseVector.h                     \
 src/SplitVector.h                      \
 src/Style.cxx                          \
 src/Style.h                            \
+src/UndoHistory.cxx                    \
+src/UndoHistory.h                      \
 src/UniConversion.cxx                  \
 src/UniConversion.h                    \
 src/UniqueString.cxx                   \
